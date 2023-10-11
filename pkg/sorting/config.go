@@ -3,12 +3,13 @@ package sorting
 import "github.com/spf13/cobra"
 
 type SortingConfig struct {
-	numeric   bool
-	reversed  bool
-	unique    bool
-	byColumn  bool
-	columnNum int32
-	separator string
+	numeric    bool
+	reversed   bool
+	unique     bool
+	byColumn   bool
+	columnNum  int32
+	separator  string
+	outputfile string
 }
 
 func getBoolFlag(cmd *cobra.Command, flag string) bool {
@@ -30,6 +31,13 @@ func getSep(cmd *cobra.Command) string {
 	return " "
 }
 
+func getOutputFile(cmd *cobra.Command) string {
+	if res, err := cmd.PersistentFlags().GetString("outputfile"); err == nil {
+		return res
+	}
+	return "sorted.txt"
+}
+
 func needSortByColumn(cmd *cobra.Command) (need bool, n int32, sep string) {
 	n, need = getColNum(cmd)
 	if need {
@@ -41,11 +49,12 @@ func needSortByColumn(cmd *cobra.Command) (need bool, n int32, sep string) {
 func NewSortingConfig(cmd *cobra.Command, args []string) *SortingConfig {
 	byClm, columnNum, sep := needSortByColumn(cmd)
 	return &SortingConfig{
-		numeric:   getBoolFlag(cmd, "numeric"),
-		reversed:  getBoolFlag(cmd, "reversed"),
-		unique:    getBoolFlag(cmd, "unique"),
-		byColumn:  byClm,
-		columnNum: columnNum,
-		separator: sep,
+		numeric:    getBoolFlag(cmd, "numeric"),
+		reversed:   getBoolFlag(cmd, "reversed"),
+		unique:     getBoolFlag(cmd, "unique"),
+		byColumn:   byClm,
+		columnNum:  columnNum,
+		separator:  sep,
+		outputfile: getOutputFile(cmd),
 	}
 }
