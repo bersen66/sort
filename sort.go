@@ -1,7 +1,7 @@
 package main
 
-import "fmt"
+import "github.com/bersen66/sort/cmd"
 
 func main() {
-	fmt.Println("Sort!")
+	cmd.Execute()
 }
